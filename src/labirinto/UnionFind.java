@@ -1,38 +1,61 @@
+// imports
 package labirinto;
 
 public class UnionFind {
-    private int[] parent, size;
+    private final int[] parent;
+    private final int[] rank;
+    private int count;
 
-    // inicializa a estrutura com n elementos
     public UnionFind(int n) {
+        if (n < 0) throw new IllegalArgumentException("Número de elementos não pode ser negativo!!");
+        count = n;
         parent = new int[n];
-        size = new int[n];
-
+        rank = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
-            size[i] = 1;
+            rank[i] = 0;
         }
     }
 
-    // encontra o pai do conjunto que contém x
-    public int find(int x) {
-        if (parent[x] != x) parent[x] = find(parent[x]);
-        return parent[x];
+    public int find(int p) {
+        validar(p);
+        while (p != parent[p]) {
+            // todos os elementos apontam para raiz
+            parent[p] = parent[parent[p]];
+            p = parent[p];
+        }
+        return p;
     }
 
-    // une dois conjuntos com base no tamanho
-    public void union(int x, int y) {
-        int raizX = find(x);
-        int raizY = find(y);
+    public int count() {
+        return count;
+    }
 
-        if (raizX != raizY) {
-            if (size[raizX] < size[raizY]) {
-                parent[raizX] = raizY;
-                size[raizY] += size[raizX];
-            } else {
-                parent[raizY] = raizX;
-                size[raizX] += size[raizY];
-            }
+    public boolean connected(int p, int q) {
+        return find(p) == find(q);
+    }
+
+    public void union(int p, int q) {
+        int raizP = find(p);
+        int raizQ = find(q);
+        if (raizP == raizQ) return;
+
+        if (rank[raizP] < rank[raizQ])
+            parent[raizP] = raizQ;
+
+        else if (rank[raizP] > rank[raizQ])
+            parent[raizQ] = raizP;
+
+        else {
+            parent[raizQ] = raizP;
+            rank[raizP]++;
         }
+        count--;
+    }
+
+    private void validar(int p) {
+        int n = parent.length;
+        if (p < 0 || p >= n)
+            throw new IllegalArgumentException("index " + p + " is not between 0 and " + (n-1));
     }
 }

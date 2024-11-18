@@ -8,26 +8,26 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner inputScanner = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
         System.out.println("Digite o caminho do arquivo do labirinto (ex.: casos4/nomeDoCaso.txt):");
-        String caminhoArquivo = inputScanner.nextLine();
+        String arquivo = in.nextLine();
 
-        try (Scanner sc = new Scanner(new File(caminhoArquivo))) {
+        try (Scanner sc = new Scanner(new File(arquivo))) {
             if (!sc.hasNextInt()) throw new IllegalArgumentException("Formato inválido para o número de linhas.");
             int m = sc.nextInt();
+
             if (!sc.hasNextInt()) throw new IllegalArgumentException("Formato inválido para o número de colunas.");
             int n = sc.nextInt();
+
             char[][] labirinto = new char[m][n];
 
             // preenchendo a matriz
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < n; j++) {
-                    if (sc.hasNext()) {
+                    if (sc.hasNext())
                         labirinto[i][j] = sc.next().charAt(0);
-                    }
-                    else {
+                    else
                         throw new IllegalStateException("Labirinto com formato inválido ou incompleto.");
-                    }
                 }
             }
 
@@ -53,7 +53,7 @@ public class Main {
             System.err.println("Erro ao processar o arquivo: " + e.getMessage());
             System.err.println("Verifique o formato do arquivo e tente novamente.");
         } finally {
-            inputScanner.close();
+            in.close();
         }
 
         System.out.println("\nANÁLISE COMPLETA! CONFIRA OS RESULTADOS:");

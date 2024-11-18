@@ -1,5 +1,4 @@
 package labirinto;
-
 import java.util.Stack;
 
 public class CaminhamentoProfundidade {
